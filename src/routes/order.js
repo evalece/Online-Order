@@ -9,7 +9,7 @@ const {
     getUserOrder
 } = require ("../service/orderService")
 
-router.get("/userOder/:user_id", async (req, res)=>{
+router.get("/userOrder/:user_id", async (req, res, next)=>{
     try{
         const userID = req.params.user_id
         console.log(userID)
@@ -26,7 +26,7 @@ router.get("/userOder/:user_id", async (req, res)=>{
     }
 })
 
-router.get("/:id", async(req,res)=> {
+router.get("/:id", async(req,res,next)=> {
     try {
         const orderID = req.params.id
         const order =await getOrder(orderID)
@@ -42,7 +42,7 @@ router.get("/:id", async(req,res)=> {
    
 })
 
-router.post("/", async (req, res)=>{ // app.use("/orders",orderRoutes) 
+router.post("/", async (req, res, next)=>{ // app.use("/orders",orderRoutes) 
     const order= req.body
     if ( order == null ){
         return res.status(400).json({
@@ -89,11 +89,11 @@ try {
 
     })
 
-}catch (err) {
-    next(err)
+    }catch (err) {
+        next(err)
 
-    
-}
+        
+    }
 
 })
 

@@ -1,4 +1,5 @@
 const pool = require("../db")
+const { insertOrder, insertOrderItem } = require("../repository/orderRepository")
 
 async function createOrder(order) {
     const client = await pool.connect()
@@ -6,20 +7,16 @@ async function createOrder(order) {
     try {
         await client.query("BEGIN")
 
-        const orderResult = await client.query(
-            `INSERT INTO orders (user_id)
-             VALUES ($1)
-             RETURNING id`,
-            [order.userID]
+        const orderID = await insertOrder(
+            client, 
+            order.userID
         )
 
-        const orderID = orderResult.rows[0].id
-
         for (const item of order.items) {
-            await client.query(
-                `INSERT INTO order_items (order_id, product_id, qty)
-                 VALUES ($1, $2, $3)`,
-                [orderID, item.pid, item.qty]
+            await insertOrderItem(
+                client,
+                orderID,
+                item
             )
         }
 
