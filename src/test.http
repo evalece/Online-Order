@@ -1,0 +1,18 @@
+
+
+POST http://localhost:3000/orders
+Content-type:application/json
+
+{  
+    "userID":1,
+     "items":[
+    {
+    "pid":1,
+    "qty":1
+    }
+    ]
+
+
+}
+
+
