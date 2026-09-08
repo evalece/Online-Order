@@ -56,10 +56,28 @@ async function findOrdersByUserID(pool, userID){ // return all orders base on us
     return result.rows
     }
 
+async function getOrderByID(pool, orderID){ // return all orders based on orderID
+    const result = await pool.query(
+        `SELECT 
+            o.id AS order_id,
+            o.user_id,
+            oi.product_id,
+            oi.qty
+            FROM orders o
+            JOIN order_items oi
+            on o.id =oi.order_id 
+            WHERE o.id =$1
+            `,
+            [orderID]    
+    )
+    return result.rows
+}
+
 module.exports ={
     insertOrder,
     insertOrderItem,
     findOrderByID,
-    findOrdersByUserID
+    findOrdersByUserID,
+    getOrderByID
 
 }
