@@ -1,12 +1,15 @@
 const pool = require("../db")
-const { insertOrder, insertOrderItem } = require("../repository/orderRepository")
+const { 
+    insertOrder,
+    insertOrderItem,
+    findOrderByID,
+    findOrdersByUserID } = require("../repository/orderRepository")
 
 async function createOrder(order) {
     const client = await pool.connect()
 
     try {
         await client.query("BEGIN")
-
         const orderID = await insertOrder(
             client, 
             order.userID
@@ -21,7 +24,6 @@ async function createOrder(order) {
         }
 
         await client.query("COMMIT")
-
         return orderID
 
     } catch (err) {
@@ -34,26 +36,15 @@ async function createOrder(order) {
 }
  
 async function getUserOrder(userID){ // return all orders base on userID
-    const result= await pool.query(
-                `SELECT 
-            o.id AS order_id,
-            o.user_id,
-            oi.product_id,
-            oi.qty
-            FROM orders o
-            JOIN order_items oi
-            on o.id =oi.order_id 
-            WHERE o.user_id =$1
-            `,
-            [userID]    
-    )
-    if (result.rows.length === 0) {
+    
+    const result = await findOrdersByUserID(pool, userID)
+  
+    if (result.length === 0) {
         return null
     }
-        const rows= result.rows
 
     const orderMap = new Map()
-    for (const row of result.rows){
+    for (const row of result){
         if (! orderMap.has(row.order_id)){
             orderMap.set(row.order_id, {
                 id: row.order_id,

@@ -1,1 +1,1 @@
-GET http://localhost:3000/orders/userOder/1
+GET http://localhost:3000/orders/userOrder/1
