@@ -1,25 +1,8 @@
 require("dotenv").config()
-const express =  require("express")
-const orderRoutes = require("./routes/order")
-const app = express()
-const PORT = Number(process.env.PORT) || 3000
+const app = require("./app")
 const pool = require("./db")
-app.use(express.json())
+const PORT = Number(process.env.PORT) || 3000
 
-app.get("/health", (req, res)=>{
-
-    res.json({status:"ok"})
-})
-
-app.use("/orders",orderRoutes)
-
-//global error 
-app.use((err, req, res, next)=>{
-    console.error(err)
-    return res.status(500).json({
-        error:"Internal server error"
-    })
-})
 
 const server = app.listen(PORT, ()=> {
     console.log(`Serever running on port ${PORT}`)

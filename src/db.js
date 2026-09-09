@@ -4,18 +4,12 @@
 const {Pool} = require("pg")
 
 const pool = new Pool ({
-    host: "localhost",
-    port: 5432,
-    user: "evaliu",
+    host: process.env.DB_HOST || "localhost",
+    port: Number(process.env.DB_PORT) || 5432,
+    user: process.env.DB_USER || "evaliu",
    //password: "123",
-    database: "order_backend"
+    database: process.env.DB_NAME || "order_backend"
 })
 
-pool.query("SELECT NOW()")
-  .then((result) => {
-    console.log("DB connected:", result.rows[0])
-  })
-  .catch((err) => {
-    console.error("DB connection failed:", err)
-  })
+
 module.exports = pool
