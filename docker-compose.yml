@@ -1,0 +1,28 @@
+services:
+  app:
+    
+    build: .
+    ports: 
+      - "3001:3000"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: evaliu
+      DB_PASSWORD: "0"
+      DB_NAME: order_backend
+    
+  postgres:
+    image: postgres:17
+    ports:
+    - "5432:5432"
+
+    environment:
+      POSTGRES_USER: "evaliu"
+      POSTGRES_PASSWORD: "0"
+      POSTGRES_DB: "order_backend"
+
+    volumes:
+      - ./postgres_init/init.sql:/docker-entrypoint-initdb.d/init.sql 
+
+        
+ 
