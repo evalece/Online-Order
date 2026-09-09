@@ -31,9 +31,12 @@ router.get("/:id", async(req,res,next)=> {
         const orderID = req.params.id
         const order =await getOrder(orderID)
         if (order == null){
+            
             return res.status(404).json({
                 error:"Order not found"
             })
+                 
+          
         }
          return res.status(200).json(order)
     } catch (err){

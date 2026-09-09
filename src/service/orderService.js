@@ -68,10 +68,11 @@ async function getUserOrder(userID){ // return all orders base on userID
 async function getOrder(orderID){ // return all orders based on orderID
     const result = await getOrderByID(pool, orderID)
     
+    
     if (result.length === 0) {
         return null
     }
-
+    
     const rows= result
 
     const order ={
