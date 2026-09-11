@@ -2,6 +2,7 @@
 
 const express = require("express")
 const router = express.Router()
+const {publishOrderCreated} = require("../kafka/producer")
 
 const {
     createOrder ,
@@ -86,11 +87,18 @@ router.post("/", async (req, res, next)=>{ // app.use("/orders",orderRoutes)
 
 try {
     const orderID = await createOrder(order)
+    // async data log to kafka broker 
+    console.log("1. DB order created", orderID)
+    console.log("2. About to push Kafka event.")
+    await publishOrderCreated(orderID)
+    console.log("3. Kafka event published")
     return res.status(201).json({
         message : "Order created",
         orderID
 
     })
+
+    
 
     }catch (err) {
         next(err)
